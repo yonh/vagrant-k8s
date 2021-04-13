@@ -60,13 +60,26 @@ EOF
 apt-get update && apt-get install -y --no-install-recommends kubelet kubeadm kubectl docker.io
 systemctl enable docker.service
 
+k8s_version="v1.21.0"
+k8s_image_repository="docker.io/yonh"
+
+# 由于coredns镜像命名为 k8s.gcr.io/coredns/coredns:v1.21.0, coredns存在于另一个项目中，无法实现在 docker hub中，所以这里手动替换名称
+coredns_image=`kubeadm config images list --kubernetes-version=${k8s_version} --image-repository=${k8s_image_repository} |grep coredns/coredns`
+replace_image=${coredns_image/coredns\/coredns/coredns}
+docker pull $replace_image
+docker tag $replace_image $coredns_image
+docker rmi $replace_image
+
+
 kubeadm init \
 	--token=pv5x90.21dmj3k5hq2lveaw \
 	--apiserver-advertise-address=192.168.100.10 \
-	--image-repository=gcr.azk8s.cn/google_containers \
+	--image-repository=${k8s_image_repository} \
 	--pod-network-cidr=10.244.0.0/16 \
 	--ignore-preflight-errors=NumCPU \
-	--kubernetes-version=v1.15.3
+	--ignore-preflight-errors=Mem \
+	--kubernetes-version=v1.21.0
+	# --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers \
 
 sudo mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config

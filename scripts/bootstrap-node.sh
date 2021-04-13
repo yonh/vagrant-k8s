@@ -46,7 +46,7 @@ curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg |apt-key add -
 # 添加 kubernetes 源
 cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 #deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
-deb http://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main
+deb https://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main
 EOF
 
 # 安装docker
