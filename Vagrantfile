@@ -7,27 +7,28 @@ Vagrant.configure("2") do |config|
   servers = [
       {
           :hostname => "k8s-master",
-          :ip => "192.168.100.10",
-          :box => "ubuntu/bionic64",
+          :ip => "{{MASTER_IP}}",
+          :box => "ubuntu/focal64",
+          #:box => "ubuntu/bionic64",
           :ram => 1024,
           :cpu => 1,
           :bootstrap_script => "scripts/bootstrap-master.sh"
       },
       {
           :hostname => "k8s-node",
-          :ip => "192.168.100.11",
-          :box => "ubuntu/bionic64",
+          :ip => "{{NODE1_IP}}",
+          :box => "ubuntu/focal64",
           :ram => 1024,
           :cpu => 1,
           :bootstrap_script => "scripts/bootstrap-node.sh"
       },{
-          :hostname => "k8s-node2",
-          :ip => "192.168.100.12",
-          :box => "ubuntu/bionic64",
-          :ram => 1024,
-          :cpu => 1,
-          :bootstrap_script => "scripts/bootstrap-node.sh"
-      }
+           :hostname => "k8s-node2",
+           :ip => "{{NODE2_IP}}",
+           :box => "ubuntu/focal64",
+           :ram => 1024,
+           :cpu => 1,
+           :bootstrap_script => "scripts/bootstrap-node.sh"
+       }
   ]
 
   servers.each do |machine|
